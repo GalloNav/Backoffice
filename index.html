@@ -1,447 +1,153 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Backoffice - Login</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --bg-primary: #0f1419;
-            --bg-secondary: #1a1f2e;
-            --bg-card: #252b3b;
-            --text-primary: #e4e6eb;
-            --text-secondary: #9ca3af;
-            --accent: #3b82f6;
-            --accent-hover: #2563eb;
-            --border: #374151;
-            --error: #ef4444;
-            --success: #10b981;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-            color: var(--text-primary);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .view {
-            display: none;
-            width: 100%;
-            max-width: 450px;
-            animation: fadeIn 0.3s ease-in;
-        }
-
-        .view.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            border: 1px solid var(--border);
-        }
-
-        .logo {
-            text-align: center;
-            margin-bottom: 32px;
-        }
-
-        .logo-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--accent);
-            border-radius: 12px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 16px;
-        }
-
-        h1 {
-            font-size: 28px;
-            margin-bottom: 8px;
-            text-align: center;
-        }
-
-        .subtitle {
-            color: var(--text-secondary);
-            text-align: center;
-            margin-bottom: 32px;
-            font-size: 14px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-secondary);
-        }
-
-        input {
-            width: 100%;
-            padding: 12px 16px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--text-primary);
-            font-size: 15px;
-            transition: all 0.2s;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        input::placeholder {
-            color: var(--text-secondary);
-        }
-
-        .btn {
-            width: 100%;
-            padding: 14px;
-            background: var(--accent);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin-top: 8px;
-        }
-
-        .btn:hover {
-            background: var(--accent-hover);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .link-text {
-            text-align: center;
-            margin-top: 24px;
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
-        .link {
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 500;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .link:hover {
-            color: var(--accent-hover);
-            text-decoration: underline;
-        }
-
-        .divider {
-            display: flex;
-            align-items: center;
-            margin: 24px 0;
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: var(--border);
-        }
-
-        .divider span {
-            padding: 0 16px;
-        }
-
-        .home-container {
-            text-align: center;
-            max-width: 800px;
-        }
-
-        .home-header {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 40px;
-            margin-bottom: 24px;
-            border: 1px solid var(--border);
-        }
-
-        .welcome-badge {
-            display: inline-block;
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--accent);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 16px;
-        }
-
-        .home-title {
-            font-size: 36px;
-            margin-bottom: 12px;
-        }
-
-        .home-subtitle {
-            color: var(--text-secondary);
-            font-size: 16px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .stat-card {
-            background: var(--bg-card);
-            border-radius: 12px;
-            padding: 24px;
-            border: 1px solid var(--border);
-            transition: transform 0.2s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-2px);
-        }
-
-        .stat-value {
-            font-size: 32px;
-            font-weight: bold;
-            color: var(--accent);
-            margin-bottom: 8px;
-        }
-
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            margin: 16px 0;
-        }
-
-        .checkbox-group input[type="checkbox"] {
-            width: auto;
-            margin-right: 8px;
-        }
-
-        .checkbox-group label {
-            margin: 0;
-            font-size: 14px;
-            cursor: pointer;
-        }
-
-        @media (max-width: 480px) {
-            .card {
-                padding: 28px 24px;
-            }
-
-            h1 {
-                font-size: 24px;
-            }
-
-            .home-title {
-                font-size: 28px;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <title>Backoffice - Portfolio</title>
+    <link rel="stylesheet" href="./style.css">
 </head>
-
 <body>
     <!-- Vista Login -->
     <div id="login" class="view active">
-        <div class="card">
-            <div class="logo">
-                <div class="logo-icon">B</div>
-                <h1>Bienvenido</h1>
-                <p class="subtitle">Inicia sesión en tu cuenta</p>
-            </div>
+        <div class="auth-container">
+            <div class="card">
+                <div class="logo">
+                    <div class="logo-icon">P</div>
+                    <h1>Bienvenido</h1>
+                    <p class="subtitle">Inicia sesion en tu portafolio</p>
+                </div>
 
-            <div class="form-group">
-                <label for="login-email">Correo electrónico</label>
-                <input type="email" id="login-email" placeholder="tu@email.com" autocomplete="email">
-            </div>
+                <div id="login-alert"></div>
 
-            <div class="form-group">
-                <label for="login-password">Contraseña</label>
-                <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
-            </div>
+                <div class="form-group">
+                    <label for="login-email">Correo electronico</label>
+                    <input type="email" id="login-email" placeholder="tu@email.com" autocomplete="email">
+                </div>
 
-            <div class="checkbox-group">
-                <input type="checkbox" id="remember">
-                <label for="remember">Recordar sesión</label>
-            </div>
+                <div class="form-group">
+                    <label for="login-password">Contraseña</label>
+                    <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+                </div>
 
-            <button class="btn" onclick="attemptLogin()">Iniciar sesión</button>
+                <button class="btn" id="btn-login">Iniciar sesion</button>
 
-            <div class="link-text">
-                ¿No tienes cuenta? <span class="link" onclick="showView('register')">Regístrate aquí</span>
+                <div class="link-text">
+                    ¿No tienes cuenta? <span class="link" onclick="showView('register')">Regístrate aquí</span>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Vista Register -->
     <div id="register" class="view">
-        <div class="card">
-            <div class="logo">
-                <div class="logo-icon">B</div>
-                <h1>Crear cuenta</h1>
-                <p class="subtitle">Completa tus datos para registrarte</p>
-            </div>
+        <div class="auth-container">
+            <div class="card">
+                <div class="logo">
+                    <div class="logo-icon">P</div>
+                    <h1>Crear cuenta</h1>
+                    <p class="subtitle">Completa tus datos para registrarte</p>
+                </div>
 
-            <div class="form-group">
-                <label for="register-name">Nombre completo</label>
-                <input type="text" id="register-name" placeholder="Juan Perez" autocomplete="name">
-            </div>
+                <div id="register-alert"></div>
 
-            <div class="form-group">
-                <label for="register-email">Correo electronico</label>
-                <input type="email" id="register-email" placeholder="tu@email.com" autocomplete="email">
-            </div>
+                <div class="form-group">
+                    <label for="register-name">Nombre completo</label>
+                    <input type="text" id="register-name" placeholder="Juan Pérez González" autocomplete="name">
+                </div>
 
-            <div class="form-group">
-                <label for="register-password">Contraseña</label>
-                <input type="password" id="register-password" autocomplete="new-password">
-            </div>
+                <div class="form-group">
+                    <label for="register-email">Correo electronico</label>
+                    <input type="email" id="register-email" placeholder="tu@email.com" autocomplete="email">
+                </div>
 
-            <div class="form-group">
-                <label for="register-confirm">Confirmar contraseña</label>
-                <input type="password" id="register-confirm" autocomplete="new-password">
-            </div>
+                <div class="form-group">
+                    <label for="register-itsonid">ITSON ID (6 dígitos)</label>
+                    <input type="text" id="register-itsonid" placeholder="216578" maxlength="6" pattern="[0-9]{6}">
+                </div>
 
-            <button class="btn" onclick="attemptRegister()">Crear cuenta</button>
+                <div class="form-group">
+                    <label for="register-password">Contraseña</label>
+                    <input type="password" id="register-password" placeholder="••••••••" autocomplete="new-password">
+                </div>
 
-            <div class="link-text">
-                ¿Ya tienes cuenta? <span class="link" onclick="showView('login')">Inicia sesion aqui</span>
+                <button class="btn" id="btn-register">Crear cuenta</button>
+
+                <div class="link-text">
+                    ¿Ya tienes cuenta? <span class="link" onclick="showView('login')">Inicia sesion aquí</span>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Vista Home (inaccesible) -->
+    <!-- Vista Home -->
     <div id="home" class="view">
         <div class="home-container">
-            <div class="home-header">
-                <div class="welcome-badge">Acceso denegado</div>
-                <h1 class="home-title">Panel de Control</h1>
-                <p class="home-subtitle">Esta vista requiere autenticación válida</p>
+            <nav class="navbar">
+                <div class="navbar-brand">
+                    <div class="logo-icon" style="width: 40px; height: 40px; font-size: 20px; margin: 0;">P</div>
+                    <span>Portfolio Manager</span>
+                </div>
+                <div class="navbar-user">
+                    <span class="user-name" id="user-name">Usuario</span>
+                    <button class="btn-logout" onclick="logout()">Cerrar sesion</button>
+                </div>
+            </nav>
+
+            <div class="content-header">
+                <h2 class="content-title">Mis Proyectos</h2>
+                <button class="btn btn-add" onclick="openCreateModal()">
+                    <span>+</span> Nuevo Proyecto
+                </button>
             </div>
 
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-label">Acceso restringido</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Autenticación requerida</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Sin permisos</div>
+            <div id="projects-container">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Cargando proyectos...</p>
                 </div>
             </div>
-
-            <button class="btn" onclick="showView('login')">Volver al Login</button>
         </div>
     </div>
 
-    <script>
-        function showView(viewName) {
-            // Si se intenta acceder a Home, redirigir a Login
-            if (viewName === 'home') {
-                viewName = 'login';
-            }
+    <!-- Modal para Crear/Editar Proyecto -->
+    <div id="project-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-title">Nuevo Proyecto</h3>
+                <button class="btn-close" onclick="closeModal()">&times;</button>
+            </div>
 
-            const views = document.querySelectorAll('.view');
-            views.forEach(view => view.classList.remove('active'));
+            <div id="modal-alert"></div>
 
-            const targetView = document.getElementById(viewName);
-            if (targetView) {
-                targetView.classList.add('active');
-            }
-        }
+            <div class="form-group">
+                <label for="project-title">Título del proyecto *</label>
+                <input type="text" id="project-title" placeholder="Mi proyecto increíble">
+            </div>
 
-        function attemptLogin() {
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
+            <div class="form-group">
+                <label for="project-description">Descripcion *</label>
+                <textarea id="project-description" placeholder="Describe tu proyecto..."></textarea>
+            </div>
 
-            if (!email || !password) {
-                return;
-            }
+            <div class="form-group">
+                <label for="project-technologies">Tecnologías (separadas por comas)</label>
+                <input type="text" id="project-technologies" placeholder="React, Node.js, MongoDB">
+            </div>
 
-            // Simulacion de login (Home es inaccesible)
-            showView('login');
-        }
+            <div class="form-group">
+                <label for="project-repository">Repositorio (URL)</label>
+                <input type="url" id="project-repository" placeholder="https://github.com/usuario/proyecto">
+            </div>
 
-        function attemptRegister() {
-            const name = document.getElementById('register-name').value;
-            const email = document.getElementById('register-email').value;
-            const password = document.getElementById('register-password').value;
-            const confirm = document.getElementById('register-confirm').value;
+            <div class="form-group">
+                <label for="project-images">Imágenes (URLs separadas por comas)</label>
+                <input type="text" id="project-images" placeholder="https://ejemplo.com/img1.jpg, https://ejemplo.com/img2.jpg">
+            </div>
 
-            if (!name || !email || !password || !confirm) {
-                return;
-            }
+            <button class="btn" id="btn-save-project">Guardar Proyecto</button>
+        </div>
+    </div>
 
-            if (password !== confirm) {
-                return;
-            }
-
-            showView('login');
-        }
-
-        // Prevenir acceso directo a Home
-        window.addEventListener('load', () => {
-            showView('login');
-        });
-    </script>
+    <script src="./Script.js"></script>
 </body>
-
 </html>
